@@ -9,7 +9,7 @@ import React from "react";
 async function Dashboard() {
   const { userId } = auth();
   const docsResults = await getDocs(collection(db, "users", userId!, "files"));
-
+  // console.log(docsResults.docs);
   const skeletonFiles: FileType[] = docsResults.docs.map((doc) => ({
     id: doc.id,
     fileName: doc.data().filename || doc.id,
@@ -19,8 +19,6 @@ async function Dashboard() {
     type: doc.data().type,
     size: doc.data().size,
   }));
-
-  // console.log(skeletonFiles);
 
   return (
     <div className="border-t">

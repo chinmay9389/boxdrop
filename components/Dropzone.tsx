@@ -47,20 +47,26 @@ const Dropzone = () => {
       type: selectedFile.type,
       size: selectedFile.size,
     });
+    console.log(docRef);
 
     const imageRef = ref(storgae, `users/${user.id}/files/${docRef.id}`);
 
-    await uploadBytes(imageRef, selectedFile).then(async (snapshot) => {
-      const downloadUrl = await getDownloadURL(imageRef);
-      await updateDoc(doc(db, "users", user.id, "files", docRef.id), {
-        downloadUrl: downloadUrl,
+    try {
+      await uploadBytes(imageRef, selectedFile).then(async (snapshot) => {
+        const downloadUrl = await getDownloadURL(imageRef);
+        await updateDoc(doc(db, "users", user.id, "files", docRef.id), {
+          downloadUrl: downloadUrl,
+        });
       });
-    });
 
-    toast.success("Uploaded successfully", {
-      id: toastId,
-    });
-    setLoading(false);
+      toast.success("Uploaded successfully", {
+        id: toastId,
+      });
+      setLoading(false);
+    } catch (error) {
+      toast.error("Upload failed");
+      console.log(error);
+    }
   };
 
   return (
